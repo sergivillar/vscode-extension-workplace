@@ -14,6 +14,29 @@
     ],
     "main": "./out/extension",
     "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "novum-webapp-workplace configuration",
+            "properties": {
+                "novum-webapp-workplace.settings": {
+                    "type": "object",
+                    "default": {
+                        "username": "",
+                        "token": ""
+                    },
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": "Username for Jira authentication."
+                        },
+                        "token": {
+                            "type": "string",
+                            "description": "Token for Jira auth."
+                        }
+                    }
+                }
+            }
+        },
         "commands": [
             {
                 "command": "extension.sayHello",

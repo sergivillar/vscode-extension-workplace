@@ -12,8 +12,6 @@ class Settings {
     constructor() {
         this.username = '';
         this.authToken = '';
-
-        this.configureExtension();
     }
 
     configureExtension = async () => {
@@ -30,12 +28,12 @@ class Settings {
             return;
         }
         const username = await vscode.window.showInputBox({
-            placeHolder: 'Enter your fisheye username',
+            placeHolder: 'Enter your Jira username',
             ignoreFocusOut: true,
         });
 
         const password = await vscode.window.showInputBox({
-            placeHolder: 'Enter your fisheye password',
+            placeHolder: 'Enter your Jira password',
             ignoreFocusOut: true,
             password: true,
         });
@@ -47,15 +45,18 @@ class Settings {
         const authToken = generateAuthToken(username, password);
 
         try {
+            // TODO maybe we can show a select to use Global or Workspace
+            // https://github.com/Microsoft/vscode-extension-samples/blob/master/configuration-sample/src/extension.ts
             await vscode.workspace
                 .getConfiguration()
                 .update(
-                    'webapp-webapp-workplace.settings',
+                    'novum-webapp-workplace.settings',
                     {username, authToken},
-                    vscode.ConfigurationTarget.Workspace
+                    vscode.ConfigurationTarget.Global
                 );
         } catch (error) {
-            return vscode.window.showErrorMessage('Error savig fisheye-extenions settings.');
+            console.error(error);
+            return vscode.window.showErrorMessage('Error savig novum-webapp-workplace settings.');
         }
 
         this.username = username;
