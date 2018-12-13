@@ -100,5 +100,7 @@
         "trailingComma": "es5",
         "bracketSpacing": false
     },
-    "dependencies": {}
+    "dependencies": {
+        "axios": "^0.18.0"
+    }
 }

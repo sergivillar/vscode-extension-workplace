@@ -5,16 +5,11 @@ const generateAuthToken = (username: string, password: string) => {
     return Buffer.from(token).toString('base64');
 };
 
-class Settings {
-    username: string;
-    authToken: string;
+const Settings = {
+    username: '',
+    authToken: '',
 
-    constructor() {
-        this.username = '';
-        this.authToken = '';
-    }
-
-    configureExtension = async () => {
+    async configureExtension() {
         if (this.username && this.authToken) {
             return;
         }
@@ -63,12 +58,14 @@ class Settings {
         this.authToken = authToken;
 
         vscode.window.showInformationMessage('Thanks. Extension ready to rock');
-    };
+    },
 
-    getSettings = () => ({
-        username: this.username,
-        authToken: this.authToken,
-    });
-}
+    getSettings() {
+        return {
+            username: this.username,
+            authToken: this.authToken,
+        };
+    },
+};
 
 export default Settings;
