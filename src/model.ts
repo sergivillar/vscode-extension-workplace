@@ -4,12 +4,14 @@ interface Ticket {
     description: string;
 }
 
+interface JiraTickets {
+    mainTicket: Ticket;
+    realtedTickets: Ticket[];
+}
+
 export interface Working {
     branchName: string;
-    jira: {
-        mainTicket: Ticket;
-        realtedTickets: Ticket[];
-    };
+    jira: JiraTickets;
     fisheye?: {
         review: string;
     };

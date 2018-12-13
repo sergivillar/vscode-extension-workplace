@@ -34,22 +34,22 @@ export class WorkingNodeProvider implements vscode.TreeDataProvider<Working> {
             );
         }
 
-
         const children = [];
         // Second level, gather all Jira tickets
         if (element.data.jira) {
-            children.push(new Working(element.data.jira, 'Jira', vscode.TreeItemCollapsibleState.Collapsed))
+            children.push(new Working(element.data.jira, 'Jira', vscode.TreeItemCollapsibleState.Collapsed));
         }
 
         // Third level, show all Jira tickets
         if (element.label === 'Jira') {
-            children.push(new Working({}, element.data.mainTicket.name, vscode.TreeItemCollapsibleState.None, , {
-                command: 'novum-webapp-workplace.openInBrowser',
-                title: '',
-                arguments: [`${JIRA_TICKET_URL}${element.data.mainTicket.name}`],
-            }))
+            children.push(
+                new Working({}, element.data.mainTicket.name, vscode.TreeItemCollapsibleState.None, {
+                    command: 'novum-webapp-workplace.openInBrowser',
+                    title: '',
+                    arguments: [`${JIRA_TICKET_URL}${element.data.mainTicket.name}`],
+                })
+            );
         }
-
 
         return Promise.resolve(children);
     }
