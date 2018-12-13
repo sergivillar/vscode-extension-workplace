@@ -11,7 +11,7 @@
     ],
     "activationEvents": [
         "onCommand:novum-webapp-workplace.working.create",
-        "onView:wip"
+        "onView:workingOn"
     ],
     "main": "./out/extension",
     "contributes": {
