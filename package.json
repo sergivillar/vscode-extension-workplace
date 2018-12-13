@@ -55,8 +55,8 @@
         "views": {
             "novum-webapp-workplace": [
                 {
-                    "id": "test",
-                    "name": "Test"
+                    "id": "wip",
+                    "name": "WIP"
                 }
             ]
         }

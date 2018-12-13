@@ -1,9 +1,12 @@
 import * as vscode from 'vscode';
 import Settings from './settings';
+import {WIPNodeProvider} from './WIPNodeProvide';
 
 export async function activate(context: vscode.ExtensionContext) {
     const settings = new Settings();
     await settings.configureExtension();
+
+    vscode.window.registerTreeDataProvider('wip', new WIPNodeProvider());
 
     const disposable = vscode.commands.registerCommand('extension.sayHello', () => {
         // The code you place here will be executed every time your command is executed
