@@ -42,7 +42,24 @@
                 "command": "extension.sayHello",
                 "title": "Hello World"
             }
-        ]
+        ],
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "novum-webapp-workplace",
+                    "title": "Webapp Workplace",
+                    "icon": "resources/analysis.svg"
+                }
+            ]
+        },
+        "views": {
+            "novum-webapp-workplace": [
+                {
+                    "id": "test",
+                    "name": "Test"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "yarn run compile",
