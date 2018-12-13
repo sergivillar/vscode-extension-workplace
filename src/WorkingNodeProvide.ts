@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 
-export class WIPNodeProvider implements vscode.TreeDataProvider<WIP> {
-    getTreeItem(element: WIP): vscode.TreeItem {
+export class WorkingNodeProvider implements vscode.TreeDataProvider<Working> {
+    getTreeItem(element: Working): vscode.TreeItem {
         return element;
     }
 
-    getChildren(element?: WIP): Thenable<WIP[]> {
+    getChildren(element?: Working): Thenable<Working[]> {
         console.log('Element');
         console.log(element);
         return Promise.resolve([]);
@@ -24,4 +24,4 @@ export class WIPNodeProvider implements vscode.TreeDataProvider<WIP> {
     }
 }
 
-export class WIP extends vscode.TreeItem {}
+export class Working extends vscode.TreeItem {}

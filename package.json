@@ -1,6 +1,6 @@
 {
     "name": "novum-webapp-workplace",
-    "displayName": "novum-webapp-workplace",
+    "displayName": "Novum Webapp Workplace",
     "description": "Manage all your work from Jira, Fisheye, current working branches in one place",
     "version": "0.0.1",
     "engines": {
@@ -10,7 +10,8 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onCommand:novum-webapp-workplace.working.create",
+        "onView:wip"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -37,26 +38,40 @@
                 }
             }
         },
+        "menus": {
+            "view/title": [
+                {
+                    "command": "novum-webapp-workplace.working.create",
+                    "when": "view == workingOn",
+                    "group": "navigation"
+                }
+            ]
+        },
         "commands": [
             {
-                "command": "extension.sayHello",
-                "title": "Hello World"
+                "command": "novum-webapp-workplace.working.create",
+                "title": "New feature",
+                "category": "Webapp",
+                "icon": {
+                    "light": "resources/light/add.svg",
+                    "dark": "resources/dark/add.svg"
+                }
             }
         ],
         "viewsContainers": {
             "activitybar": [
                 {
-                    "id": "novum-webapp-workplace",
+                    "id": "novumWebappWorkplace",
                     "title": "Webapp Workplace",
                     "icon": "media/icon.svg"
                 }
             ]
         },
         "views": {
-            "novum-webapp-workplace": [
+            "novumWebappWorkplace": [
                 {
-                    "id": "wip",
-                    "name": "WIP"
+                    "id": "workingOn",
+                    "name": "Working On"
                 }
             ]
         }
