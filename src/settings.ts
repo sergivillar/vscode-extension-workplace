@@ -1,23 +1,28 @@
 import * as vscode from 'vscode';
 
+const generateAuthToken = (username: string, password: string) => {
+    const token = `${username}:${password}`;
+    return Buffer.from(token).toString('base64');
+};
+
 class Settings {
     username: string;
-    password: string;
+    authToken: string;
 
     constructor() {
         this.username = '';
-        this.password = '';
+        this.authToken = '';
 
         this.configureExtension();
     }
 
     configureExtension = async () => {
-        if (this.username && this.password) {
+        if (this.username && this.authToken) {
             return;
         }
 
         const result = await vscode.window.showInformationMessage(
-            'Welcome to fisheye-extensions. You need to configure the extension',
+            'Welcome to novum-webapp-workplace. You need to configure the extension',
             'OK'
         );
 
@@ -36,26 +41,32 @@ class Settings {
         });
 
         if (!username || !password) {
-            return;
+            return vscode.window.showErrorMessage("Jira's user and password must be provided");
         }
+
+        const authToken = generateAuthToken(username, password);
 
         try {
             await vscode.workspace
                 .getConfiguration()
-                .update('fisheye.settings', {username, password}, vscode.ConfigurationTarget.Global);
+                .update(
+                    'webapp-webapp-workplace.settings',
+                    {username, authToken},
+                    vscode.ConfigurationTarget.Workspace
+                );
         } catch (error) {
             return vscode.window.showErrorMessage('Error savig fisheye-extenions settings.');
         }
 
         this.username = username;
-        this.password = password;
+        this.authToken = authToken;
 
         vscode.window.showInformationMessage('Thanks. Extension ready to rock');
     };
 
     getSettings = () => ({
         username: this.username,
-        password: this.password,
+        authToken: this.authToken,
     });
 }
 
