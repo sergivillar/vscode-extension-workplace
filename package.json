@@ -11,6 +11,7 @@
     ],
     "activationEvents": [
         "onCommand:novum-webapp-workplace.tasks.create",
+        "onCommand:novum-webapp-workplace.tasks.refresh",
         "onView:tasks"
     ],
     "main": "./out/extension",
@@ -44,17 +45,31 @@
                     "command": "novum-webapp-workplace.tasks.create",
                     "when": "view == tasks",
                     "group": "navigation"
+                },
+                {
+                    "command": "novum-webapp-workplace.tasks.refresh",
+                    "when": "view == tasks",
+                    "group": "navigation"
                 }
             ]
         },
         "commands": [
             {
-                "command": "novum-webapp-workplace.tasks.create",
-                "title": "New feature",
+                "command": "novum-webapp-workplace.tasks.refresh",
+                "title": "Refresh",
                 "category": "Webapp",
                 "icon": {
-                    "light": "resources/light/add.svg",
-                    "dark": "resources/dark/add.svg"
+                    "light": "resources/light/refresh2.svg",
+                    "dark": "resources/dark/refresh2.svg"
+                }
+            },
+            {
+                "command": "novum-webapp-workplace.tasks.create",
+                "title": "New task",
+                "category": "Webapp",
+                "icon": {
+                    "light": "resources/light/add-task.svg",
+                    "dark": "resources/dark/add-task.svg"
                 }
             }
         ],
