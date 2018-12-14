@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import {TaskNodeProvider} from './views/tasks';
-import createTask from './commands/new-feature';
+import createTask from './commands/new-task';
 
 export async function activate(context: vscode.ExtensionContext) {
     // await settings.configureExtension();
