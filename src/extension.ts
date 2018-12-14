@@ -1,18 +1,18 @@
 import * as vscode from 'vscode';
 import {TaskNodeProvider} from './views/tasks';
 import createTask from './commands/new-task';
-import refreshTask from './commands/refresh-tasks';
 
 export async function activate(context: vscode.ExtensionContext) {
     // await settings.configureExtension();
 
-    vscode.window.registerTreeDataProvider('tasks', new TaskNodeProvider(context));
+    const TaksView = new TaskNodeProvider(context);
+    vscode.window.registerTreeDataProvider('tasks', TaksView);
 
     vscode.commands.registerCommand('novum-webapp-workplace.openInBrowser', url =>
         vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`${url}`))
     );
 
-    vscode.commands.registerCommand('novum-webapp-workplace.tasks.refresh', () => refreshTask(context));
+    vscode.commands.registerCommand('novum-webapp-workplace.tasks.refresh', () => TaksView.refresh());
 
     const disposable = vscode.commands.registerCommand(
         'novum-webapp-workplace.tasks.create',

@@ -59,8 +59,8 @@
                 "title": "Refresh",
                 "category": "Webapp",
                 "icon": {
-                    "light": "resources/light/refresh2.svg",
-                    "dark": "resources/dark/refresh2.svg"
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
                 }
             },
             {

@@ -15,6 +15,10 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TaskTreeItem> {
         this.tasks = context.workspaceState.get('tasks');
     }
 
+    refresh(): void {
+        this._onDidChangeTreeData.fire();
+    }
+
     getTreeItem(element: TaskTreeItem): vscode.TreeItem {
         return element;
     }
