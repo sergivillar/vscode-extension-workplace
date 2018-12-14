@@ -3,6 +3,7 @@ import settings from '../settings';
 import api from '../api';
 import git from '../git';
 import {Task, TASK_STATUS_WIP} from '../model';
+import {taskProvider} from '../views/tasks';
 
 function createTask(context: vscode.ExtensionContext): (...args: any[]) => any {
     return async () => {
@@ -47,7 +48,8 @@ function createTask(context: vscode.ExtensionContext): (...args: any[]) => any {
                 createdAt: Date.now(),
             };
 
-            context.workspaceState.update('tasks', [dataToSave]);
+            await context.workspaceState.update('tasks', [dataToSave]);
+            taskProvider.refresh();
             vscode.window.showInformationMessage(`Your new branch ${branchName} has been created`);
         } catch (error) {
             console.error(error);

@@ -2,8 +2,16 @@ import * as vscode from 'vscode';
 import {JIRA_TICKET_URL} from '../constants';
 import {Tasks, Task, JiraTicket, isTask, isJiraTicket} from '../model';
 
+export let taskProvider: TaskNodeProvider;
+
+export const activateView = (context: vscode.ExtensionContext) => {
+    taskProvider = new TaskNodeProvider(context);
+    vscode.window.registerTreeDataProvider('tasks', taskProvider);
+};
+
 export class TaskNodeProvider implements vscode.TreeDataProvider<TaskTreeItem> {
     tasks: Tasks | null | undefined = null;
+    context: vscode.ExtensionContext;
 
     // tslint:disable-next-line:variable-name
     _onDidChangeTreeData: vscode.EventEmitter<TaskTreeItem | undefined> = new vscode.EventEmitter<
@@ -12,10 +20,12 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TaskTreeItem> {
     onDidChangeTreeData: vscode.Event<TaskTreeItem | undefined> = this._onDidChangeTreeData.event;
 
     constructor(context: vscode.ExtensionContext) {
+        this.context = context;
         this.tasks = context.workspaceState.get('tasks');
     }
 
     refresh(): void {
+        this.tasks = this.context.workspaceState.get('tasks');
         this._onDidChangeTreeData.fire();
     }
 

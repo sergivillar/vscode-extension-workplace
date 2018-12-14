@@ -62,10 +62,8 @@ const Settings = {
 
     getSettings() {
         return {
-            // username: this.username,
-            // authToken: this.authToken,
-            username: 'sfernandez',
-            authToken: 'c2Zlcm5hbmRlejptSVBzM1NTYw==',
+            username: this.username,
+            authToken: this.authToken,
         };
     },
 };
