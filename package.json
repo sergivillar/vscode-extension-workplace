@@ -10,8 +10,8 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:novum-webapp-workplace.working.create",
-        "onView:workingOn"
+        "onCommand:novum-webapp-workplace.tasks.create",
+        "onView:tasks"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -41,15 +41,15 @@
         "menus": {
             "view/title": [
                 {
-                    "command": "novum-webapp-workplace.working.create",
-                    "when": "view == workingOn",
+                    "command": "novum-webapp-workplace.tasks.create",
+                    "when": "view == tasks",
                     "group": "navigation"
                 }
             ]
         },
         "commands": [
             {
-                "command": "novum-webapp-workplace.working.create",
+                "command": "novum-webapp-workplace.tasks.create",
                 "title": "New feature",
                 "category": "Webapp",
                 "icon": {
@@ -70,8 +70,8 @@
         "views": {
             "novumWebappWorkplace": [
                 {
-                    "id": "workingOn",
-                    "name": "Working On"
+                    "id": "tasks",
+                    "name": "Tasks"
                 }
             ]
         }

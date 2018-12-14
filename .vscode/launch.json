@@ -3,7 +3,7 @@
 // Hover to view descriptions of existing attributes.
 // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 {
-	"version": "0.2.0",
+    "version": "0.2.0",
     "configurations": [
         {
             "name": "Extension",
@@ -11,11 +11,10 @@
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}"
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "/Users/sfernandez/Repositories/webapp"
             ],
-            "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
-            ],
+            "outFiles": ["${workspaceFolder}/out/**/*.js"],
             "preLaunchTask": "npm: watch"
         },
         {
@@ -27,9 +26,7 @@
                 "--extensionDevelopmentPath=${workspaceFolder}",
                 "--extensionTestsPath=${workspaceFolder}/out/test"
             ],
-            "outFiles": [
-                "${workspaceFolder}/out/test/**/*.js"
-            ],
+            "outFiles": ["${workspaceFolder}/out/test/**/*.js"],
             "preLaunchTask": "npm: watch"
         }
     ]

@@ -3,7 +3,7 @@ import settings from './settings';
 
 const getJiraTicketInfoUrl = (id: string) => `https://jira.tuenti.io/jira/rest/api/latest/issue/${id}`;
 const getReviewsInfoFromJiraTicketUrl = (id: string) =>
-    `https://jira.tuenti.io/jira/rest/dev-status/latest/issue/detail?issueId=${id}&applicationType=fecru&dataType=review`;
+    `https://fisheye.tuenti.io/rest-service/search-v1/reviewsForIssue.json?jiraKey=${id}`;
 
 const fetchJiraTicket = (ticketId: string) =>
     axios.get(getJiraTicketInfoUrl(ticketId), {
