@@ -12,6 +12,7 @@ export async function activate(context: vscode.ExtensionContext) {
             jira: {
                 mainTicket: {
                     id: 278515,
+                    key: 'ACCOUNT-7651',
                     name: 'Prueba',
                     description: 'Description',
                 },
@@ -22,18 +23,11 @@ export async function activate(context: vscode.ExtensionContext) {
     ]);
 
     activateView(context);
-
     context.subscriptions.push(
         vscode.commands.registerCommand('novum-webapp-workplace.openInBrowser', url =>
             vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`${url}`))
-        )
-    );
-
-    context.subscriptions.push(
-        vscode.commands.registerCommand('novum-webapp-workplace.tasks.refresh', refreshTasks(context))
-    );
-
-    context.subscriptions.push(
+        ),
+        vscode.commands.registerCommand('novum-webapp-workplace.tasks.refresh', refreshTasks(context)),
         vscode.commands.registerCommand('novum-webapp-workplace.tasks.create', createTask(context))
     );
 }

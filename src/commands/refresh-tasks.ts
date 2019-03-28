@@ -1,49 +1,51 @@
 import * as vscode from 'vscode';
-import settings from '../settings';
-import api from '../api';
-import git from '../git';
-import {Task, TASK_STATUS_WIP} from '../model';
+import {fetchJiraTicket, fetchReviewsInfoFromJiraTicket} from '../api';
 import {taskProvider} from '../views/tasks';
+import {Tasks} from '../model';
 
-function refreshTasks(context: vscode.ExtensionContext): (...args: any[]) => any {
-    return async () => {
-        const tasks = context.workspaceState.get('tasks');
-        const {username} = settings.getSettings();
-        console.log(tasks);
+const refreshTasks = (context: vscode.ExtensionContext) => async () => {
+    const tasks = context.workspaceState.get('tasks') as Tasks;
+    const taskToUpdate = [] as Tasks;
 
-        try {
-            // const {data} = await api.fetchJiraTicket(jiraTicket);
-            // const {
-            //     id,
-            //     key,
-            //     fields: {summary, description},
-            // } = data;
-            // const branchNameSuggested = `${username}-${key}-${summary.replace(/ /g, '-')}`;
-            // const branchName = await vscode.window.showInputBox({
-            //     value: branchNameSuggested,
-            //     ignoreFocusOut: true,
-            // });
-            // if (!branchName) {
-            //     return vscode.window.showErrorMessage('A new branch name should be provided');
-            // }
-            // git.createBranch(branchName);
-            // const dataToSave: Task = {
-            //     status: TASK_STATUS_WIP,
-            //     branchName,
-            //     jira: {
-            //         mainTicket: {id, name: jiraTicket, description},
-            //         relatedTickets: [],
-            //     },
-            //     createdAt: Date.now(),
-            // };
-            // await context.workspaceState.update('tasks', [dataToSave]);
-            // taskProvider.refresh();
-            // vscode.window.showInformationMessage(`Your new branch ${branchName} has been created`);
-        } catch (error) {
-            console.error(error);
-            return vscode.window.showErrorMessage("There's any problem creating the new feature.");
+    try {
+        for (const task of tasks) {
+            // TODO ADD loading
+            const {
+                status,
+                branchName,
+                jira: {mainTicket, relatedTickets},
+                createdAt,
+            } = task;
+
+            const {data: mainTicketData} = await fetchJiraTicket(String(mainTicket.id));
+
+            const {
+                id,
+                key,
+                fields: {summary, description},
+            } = mainTicketData;
+
+            const reviews = await fetchReviewsInfoFromJiraTicket(String(mainTicket.key));
+
+            taskToUpdate.push({
+                status,
+                branchName,
+                jira: {
+                    mainTicket: {id, key, name: summary, description},
+                    relatedTickets,
+                },
+                fisheye: reviews.map(({name, permaId, state}) => ({id: permaId.id, name, state})),
+                createdAt,
+            });
         }
-    };
-}
+
+        await context.workspaceState.update('tasks', taskToUpdate);
+        taskProvider.refresh();
+        vscode.window.showInformationMessage('All tasks updated');
+    } catch (error) {
+        console.error(error);
+        return vscode.window.showErrorMessage("There's any problem creating the new feature.");
+    }
+};
 
 export default refreshTasks;

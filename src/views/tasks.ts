@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
-import {JIRA_TICKET_URL} from '../constants';
-import {Tasks, Task, JiraTicket, isTask, isJiraTicket} from '../model';
+import {Tasks, Task, JiraTicket, Reviews, isTask, isJiraTicket, isReview, isCR} from '../model';
 
 export let taskProvider: TaskNodeProvider;
 
@@ -13,8 +12,7 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TaskTreeItem> {
     tasks: Tasks | null | undefined = null;
     context: vscode.ExtensionContext;
 
-    // tslint:disable-next-line:variable-name
-    _onDidChangeTreeData: vscode.EventEmitter<TaskTreeItem | undefined> = new vscode.EventEmitter<
+    private _onDidChangeTreeData: vscode.EventEmitter<TaskTreeItem | undefined> = new vscode.EventEmitter<
         TaskTreeItem | undefined
     >();
     onDidChangeTreeData: vscode.Event<TaskTreeItem | undefined> = this._onDidChangeTreeData.event;
@@ -24,7 +22,7 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TaskTreeItem> {
         this.tasks = context.workspaceState.get('tasks');
     }
 
-    refresh(): void {
+    refresh() {
         this.tasks = this.context.workspaceState.get('tasks');
         this._onDidChangeTreeData.fire();
     }
@@ -53,6 +51,15 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TaskTreeItem> {
                 new TaskTreeItem(element.data.jira, 'Jira', vscode.TreeItemCollapsibleState.Collapsed)
             );
         }
+        if (isReview(element.data)) {
+            children.push(
+                new TaskTreeItem(
+                    element.data.fisheye || [],
+                    'Reviews',
+                    vscode.TreeItemCollapsibleState.Collapsed
+                )
+            );
+        }
 
         // Third level, show all Jira tickets
         if (isJiraTicket(element.data)) {
@@ -60,16 +67,28 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TaskTreeItem> {
                 new TaskTreeItem(null, element.data.mainTicket.name, vscode.TreeItemCollapsibleState.None, {
                     command: 'novum-webapp-workplace.openInBrowser',
                     title: '',
-                    arguments: [`${JIRA_TICKET_URL}${element.data.mainTicket.name}`],
+                    arguments: [`https://jira.tuenti.io/jira/browse/${element.data.mainTicket.name}`],
                 })
             );
+        }
+
+        if (isCR(element.data)) {
+            element.data.map(item => {
+                children.push(
+                    new TaskTreeItem(null, item.name, vscode.TreeItemCollapsibleState.None, {
+                        command: 'novum-webapp-workplace.openInBrowser',
+                        title: '',
+                        arguments: [`https://fisheye.tuenti.io/cru/${item.id}`],
+                    })
+                );
+            });
         }
 
         return Promise.resolve(children);
     }
 }
 
-type Data = Task | JiraTicket | null;
+type Data = Task | JiraTicket | Reviews | null;
 
 class TaskTreeItem extends vscode.TreeItem {
     data: Data;
