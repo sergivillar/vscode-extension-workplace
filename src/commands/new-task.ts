@@ -10,7 +10,8 @@ function createTask(context: vscode.ExtensionContext): (...args: any[]) => any {
         const {username} = settings.getSettings();
         const jiraTicket = await vscode.window.showInputBox({
             placeHolder: 'Enter your Jira ticket (e.g ACCOUNT-XXXX)',
-            value: 'ACCOUNT-6781',
+            // TODO remove this when finish extension
+            value: 'ACCOUNT-7651',
             ignoreFocusOut: true,
         });
         if (!jiraTicket) {
