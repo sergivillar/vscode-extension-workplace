@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
-import {TreeNode, ReviewNode, TaskNode, Tasks, TicketNode, TicketsNode, ReviewsNode} from '../nodes';
+import {TreeNode, ReviewNode, TaskNode, Tasks, TicketNode, TicketsNode, ReviewsNode} from '../../nodes';
+import { getReviewComments } from '../../api/fisheye';
+import Settings from '../../settings';
 
 export let taskProvider: TaskNodeProvider;
 
@@ -25,17 +27,15 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
         this._onDidChangeTreeData.fire();
     }
 
-    getTreeItem(element: TreeNode): vscode.TreeItem {
-        return element.treeItem;
+    getTreeItem({treeItem}: TreeNode): vscode.TreeItem {
+        return treeItem;
     }
 
-    getChildren(element?: TreeNode) {
-        // No tasks in user storage
+    async getChildren(element?: TreeNode) {
         if (!this.tasks) {
             return [];
         }
 
-        // First level, show all tasks branches
         if (!element) {
             return this.tasks.map(item => {
                 const task: TaskNode = {
@@ -51,7 +51,6 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
         }
 
         const children = [];
-
         switch (element.type) {
             case 'task':
                 {
@@ -102,11 +101,12 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
             case 'reviews':
                 {
                     for (const review of element.data) {
+                        const comments = await getReviewComments(review.id, Settings.authToken);
                         const node: ReviewNode = {
                             type: 'review',
                             data: review,
                             treeItem: {
-                                label: `${review.id} - ${review.name}`,
+                                label: `${review.id} - ${review.name} (${comments.length})`,
                                 collapsibleState: vscode.TreeItemCollapsibleState.None,
                                 command: {
                                     command: 'novum-webapp-workplace.openInBrowser',
@@ -124,21 +124,6 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
                 break;
         }
 
-        return Promise.resolve(children);
+        return children;
     }
 }
-/**
-class TaskTreeItem extends vscode.TreeItem {
-    node: TreeNode | null;
-
-    constructor(
-        node: TreeNode | null,
-        label: string,
-        collapsibleState: vscode.TreeItemCollapsibleState,
-        command?: vscode.Command
-    ) {
-        super(label, collapsibleState);
-        this.node = node;
-        this.command = command;
-    }
-}*/

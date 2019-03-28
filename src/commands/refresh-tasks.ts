@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import settings from '../settings';
-import {fetchReviewsInfoFromJiraTicket} from '../api/fisheye';
+import {getReviewsByTicket} from '../api/fisheye';
 import {taskProvider} from '../views/tasks';
 import {Tasks} from '../nodes';
-import {fetchJiraTicket} from '../api/jira';
+import {getTicket} from '../api/jira';
 
 const refreshTasks = (context: vscode.ExtensionContext) => async () => {
     const tasks = context.workspaceState.get('tasks') as Tasks;
@@ -23,9 +23,9 @@ const refreshTasks = (context: vscode.ExtensionContext) => async () => {
                 id,
                 key,
                 fields: {summary, description},
-            } = await fetchJiraTicket(String(main.id), settings.authToken);
+            } = await getTicket(String(main.id), settings.authToken);
 
-            const reviews = await fetchReviewsInfoFromJiraTicket(String(main.key), settings.authToken);
+            const reviews = await getReviewsByTicket(String(main.key), settings.authToken);
 
             taskToUpdate.push({
                 status,
