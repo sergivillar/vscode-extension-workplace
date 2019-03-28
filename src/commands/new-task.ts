@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
+import {getCurrentBranch, createBranch} from '../api/git';
+import {fetchJiraTicket} from '../api/jira';
 import settings from '../settings';
-import {fetchJiraTicket} from '../api';
-import {Task, TASK_STATUS_WIP} from '../model';
 import {taskProvider} from '../views/tasks';
-import {getCurrentBranch, createBranch} from '../git';
+import {ITask, TASK_STATUS_WIP} from '../nodes';
 
 const createTask = (context: vscode.ExtensionContext) => async () => {
-    const {username} = settings.getSettings();
+    const {username} = settings;
     const jiraTicket = await vscode.window.showInputBox({
         placeHolder: 'Enter your Jira ticket (e.g ACCOUNT-XXXX)',
         // TODO remove this when finish extension
@@ -17,18 +17,18 @@ const createTask = (context: vscode.ExtensionContext) => async () => {
         return vscode.window.showErrorMessage('You should provide your JIRA ticket');
     }
     try {
-        const {data} = await fetchJiraTicket(jiraTicket);
         const currentBranch = getCurrentBranch();
         if (currentBranch !== 'master') {
             return vscode.window.showErrorMessage(
                 'Please go to branch master (save all you work before start a new feature :P)'
             );
         }
+
         const {
             id,
             key,
             fields: {summary, description},
-        } = data;
+        } = await fetchJiraTicket(jiraTicket, settings.authToken);
         const branchNameSuggested = `${username}-${key}-${summary.replace(/ /g, '-')}`;
         const branchName = await vscode.window.showInputBox({
             value: branchNameSuggested,
@@ -38,12 +38,12 @@ const createTask = (context: vscode.ExtensionContext) => async () => {
             return vscode.window.showErrorMessage('A new branch name should be provided');
         }
         createBranch(branchName);
-        const dataToSave: Task = {
+        const dataToSave: ITask = {
             status: TASK_STATUS_WIP,
             branchName,
-            jira: {
-                mainTicket: {id, key, name: jiraTicket, description},
-                relatedTickets: [],
+            tickets: {
+                main: {id: Number(id), key, name: jiraTicket, description},
+                related: [],
             },
             createdAt: Date.now(),
         };

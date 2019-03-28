@@ -1,7 +1,9 @@
 import * as vscode from 'vscode';
-import {fetchJiraTicket, fetchReviewsInfoFromJiraTicket} from '../api';
+import settings from '../settings';
+import {fetchReviewsInfoFromJiraTicket} from '../api/fisheye';
 import {taskProvider} from '../views/tasks';
-import {Tasks} from '../model';
+import {Tasks} from '../nodes';
+import {fetchJiraTicket} from '../api/jira';
 
 const refreshTasks = (context: vscode.ExtensionContext) => async () => {
     const tasks = context.workspaceState.get('tasks') as Tasks;
@@ -13,28 +15,26 @@ const refreshTasks = (context: vscode.ExtensionContext) => async () => {
             const {
                 status,
                 branchName,
-                jira: {mainTicket, relatedTickets},
+                tickets: {main, related},
                 createdAt,
             } = task;
-
-            const {data: mainTicketData} = await fetchJiraTicket(String(mainTicket.id));
 
             const {
                 id,
                 key,
                 fields: {summary, description},
-            } = mainTicketData;
+            } = await fetchJiraTicket(String(main.id), settings.authToken);
 
-            const reviews = await fetchReviewsInfoFromJiraTicket(String(mainTicket.key));
+            const reviews = await fetchReviewsInfoFromJiraTicket(String(main.key), settings.authToken);
 
             taskToUpdate.push({
                 status,
                 branchName,
-                jira: {
-                    mainTicket: {id, key, name: summary, description},
-                    relatedTickets,
+                tickets: {
+                    main: {id: Number(id), key, name: summary, description},
+                    related,
                 },
-                fisheye: reviews.map(({name, permaId, state}) => ({id: permaId.id, name, state})),
+                reviews: reviews.map(({name, permaId, state}) => ({id: permaId.id, name, state})),
                 createdAt,
             });
         }

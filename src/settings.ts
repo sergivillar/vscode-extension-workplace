@@ -1,9 +1,7 @@
 import * as vscode from 'vscode';
 
-const generateAuthToken = (username: string, password: string) => {
-    const token = `${username}:${password}`;
-    return Buffer.from(token).toString('base64');
-};
+const generateAuthToken = (username: string, password: string) =>
+    Buffer.from(`${username}:${password}`).toString('base64');
 
 const Settings = {
     username: '',
@@ -58,13 +56,6 @@ const Settings = {
         this.authToken = authToken;
 
         vscode.window.showInformationMessage('Thanks. Extension ready to rock');
-    },
-
-    getSettings() {
-        return {
-            username: this.username,
-            authToken: this.authToken,
-        };
     },
 };
 

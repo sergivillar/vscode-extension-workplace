@@ -9,14 +9,14 @@ export async function activate(context: vscode.ExtensionContext) {
         {
             status: 'working',
             branchName: 'sfernandez-ACCOUNT-7651-prueba',
-            jira: {
-                mainTicket: {
+            tickets: {
+                main: {
                     id: 278515,
                     key: 'ACCOUNT-7651',
                     name: 'Prueba',
                     description: 'Description',
                 },
-                relatedTickets: [],
+                related: [],
             },
             createdAt: Date.now(),
         },
