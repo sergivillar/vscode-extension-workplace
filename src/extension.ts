@@ -2,9 +2,10 @@ import * as vscode from 'vscode';
 import {activateView} from './views/tasks';
 import createTask from './commands/new-task';
 import refreshTasks from './commands/refresh-tasks';
+import Settings from './settings';
 
 export async function activate(context: vscode.ExtensionContext) {
-    // await settings.configureExtension();
+    await Settings.configureExtension();
     await context.workspaceState.update('tasks', [
         {
             status: 'working',

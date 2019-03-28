@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import {getCurrentBranch, createBranch} from '../api/git';
-import {fetchJiraTicket} from '../api/jira';
+import {getTicket} from '../api/jira';
 import settings from '../settings';
 import {taskProvider} from '../views/tasks';
 import {ITask, TASK_STATUS_WIP} from '../nodes';
@@ -28,7 +28,7 @@ const createTask = (context: vscode.ExtensionContext) => async () => {
             id,
             key,
             fields: {summary, description},
-        } = await fetchJiraTicket(jiraTicket, settings.authToken);
+        } = await getTicket(jiraTicket, settings.authToken);
         const branchNameSuggested = `${username}-${key}-${summary.replace(/ /g, '-')}`;
         const branchName = await vscode.window.showInputBox({
             value: branchNameSuggested,
