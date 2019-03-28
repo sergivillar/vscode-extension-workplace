@@ -5,7 +5,7 @@ import refreshTasks from './commands/refresh-tasks';
 
 export async function activate(context: vscode.ExtensionContext) {
     // await settings.configureExtension();
-    context.workspaceState.update('tasks', [
+    await context.workspaceState.update('tasks', [
         {
             status: 'working',
             branchName: 'sfernandez-ACCOUNT-7651-prueba',
@@ -30,6 +30,8 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('novum-webapp-workplace.tasks.refresh', refreshTasks(context)),
         vscode.commands.registerCommand('novum-webapp-workplace.tasks.create', createTask(context))
     );
+
+    await refreshTasks(context)();
 }
 
 // this method is called when your extension is deactivated

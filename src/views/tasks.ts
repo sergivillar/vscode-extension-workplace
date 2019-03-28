@@ -34,7 +34,6 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
         if (!this.tasks) {
             return [];
         }
-        console.log(element);
 
         // First level, show all tasks branches
         if (!element) {
