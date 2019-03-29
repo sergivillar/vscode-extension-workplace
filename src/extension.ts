@@ -10,6 +10,7 @@ export async function activate(context: vscode.ExtensionContext) {
     await Settings.configureExtension();
     await context.workspaceState.update('tasks', [
         {
+            id: '123123',
             status: 'working',
             branchName: 'sfernandez-ACCOUNT-7651-prueba',
             tickets: {

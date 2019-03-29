@@ -4,7 +4,7 @@ export const TASK_STATUS_WIP = 'working';
 export const TASK_STATUS_REVIEW = 'review';
 export const TASK_STATUS_DONE = 'done';
 
-type TaskStatus = typeof TASK_STATUS_WIP | typeof TASK_STATUS_DONE | typeof TASK_STATUS_REVIEW;
+export type TaskStatus = typeof TASK_STATUS_WIP | typeof TASK_STATUS_DONE | typeof TASK_STATUS_REVIEW;
 
 export const TASK_STATUS: TaskStatus[] = ['working', 'review', 'done'];
 
@@ -27,6 +27,7 @@ export interface Tickets {
 }
 
 export interface ITask {
+    id: string;
     status: TaskStatus;
     branchName: string;
     tickets: Tickets;
