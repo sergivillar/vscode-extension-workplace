@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import {v4 as uuid} from 'uuid';
 import {getCurrentBranch, createBranch} from '../api/git';
 import {getTicket} from '../api/jira';
 import settings from '../settings';
@@ -39,6 +40,7 @@ const createTask = (context: vscode.ExtensionContext) => async () => {
         }
         createBranch(branchName);
         const dataToSave: ITask = {
+            id: uuid(),
             status: TASK_STATUS_WIP,
             branchName,
             tickets: {

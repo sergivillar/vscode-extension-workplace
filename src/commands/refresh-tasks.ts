@@ -13,6 +13,7 @@ const refreshTasks = (context: vscode.ExtensionContext) => async () => {
         for (const task of tasks) {
             // TODO ADD loading
             const {
+                id: uuid,
                 status,
                 branchName,
                 tickets: {main, related},
@@ -28,6 +29,7 @@ const refreshTasks = (context: vscode.ExtensionContext) => async () => {
             const reviews = await getReviewsByTicket(String(main.key), settings.authToken);
 
             taskToUpdate.push({
+                id: uuid,
                 status,
                 branchName,
                 tickets: {
