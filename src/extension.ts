@@ -3,6 +3,7 @@ import {activateView} from './views/tasks';
 import createTask from './commands/new-task';
 import refreshTasks from './commands/refresh-tasks';
 import promoteTaks from './commands/promote-task';
+import checkout from './commands/checkout';
 import Settings from './settings';
 import {TaskNode} from './nodes';
 
@@ -35,6 +36,9 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('novum-webapp-workplace.tasks.create', createTask(context)),
         vscode.commands.registerCommand('novum-webapp-workplace.tasks.promote', (task: TaskNode) =>
             promoteTaks(task, context)
+        ),
+        vscode.commands.registerCommand('novum-webapp-workplace.tasks.checkout', (task: TaskNode) =>
+            checkout(task, context)
         )
     );
 

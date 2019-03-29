@@ -56,6 +56,17 @@
                 {
                     "command": "novum-webapp-workplace.tasks.promote",
                     "when": "view == tasks && viewItem == task"
+                },
+                {
+                    "command": "novum-webapp-workplace.tasks.checkout",
+                    "when": "view == tasks && viewItem == task",
+                    "group": "inline"
+                }
+            ],
+            "commandPalette": [
+                {
+                    "command": "novum-webapp-workplace.tasks.checkout",
+                    "when": "false"
                 }
             ]
         },
@@ -81,6 +92,14 @@
             {
                 "command": "novum-webapp-workplace.tasks.promote",
                 "title": "Move task status"
+            },
+            {
+                "command": "novum-webapp-workplace.tasks.checkout",
+                "title": "Checkout",
+                "icon": {
+                    "dark": "resources/dark/checkout.svg",
+                    "light": "resources/light/checkout.svg"
+                }
             }
         ],
         "viewsContainers": {
