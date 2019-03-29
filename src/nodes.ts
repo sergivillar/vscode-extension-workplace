@@ -38,17 +38,17 @@ export interface ITask {
 export type Tasks = ITask[];
 export type Reviews = IReview[];
 
-type TreeNodeBase<Type extends string, Data> = {
+interface ITreeNodeBase<Type extends string, Data> {
     type: Type;
     data: Data;
     treeItem: TreeItem;
-};
+}
 
-export type TaskStatusNode = TreeNodeBase<'task-status', TaskStatus>;
-export type TaskNode = TreeNodeBase<'task', ITask>;
-export type TicketNode = TreeNodeBase<'ticket', ITicket>;
-export type TicketsNode = TreeNodeBase<'tickets', Tickets>;
-export type ReviewsNode = TreeNodeBase<'reviews', Reviews>;
-export type ReviewNode = TreeNodeBase<'review', IReview>;
+export type TaskStatusNode = ITreeNodeBase<'task-status', TaskStatus>;
+export type TaskNode = ITreeNodeBase<'task', ITask>;
+export type TicketNode = ITreeNodeBase<'ticket', ITicket>;
+export type TicketsNode = ITreeNodeBase<'tickets', Tickets>;
+export type ReviewsNode = ITreeNodeBase<'reviews', Reviews>;
+export type ReviewNode = ITreeNodeBase<'review', IReview>;
 
 export type TreeNode = TaskStatusNode | TaskNode | TicketNode | TicketsNode | ReviewsNode | ReviewNode;

@@ -21,8 +21,10 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
     tasks: Tasks | null | undefined = null;
     context: vscode.ExtensionContext;
 
-    private _onDidChangeTreeData = new vscode.EventEmitter<TreeNode | undefined>();
-    onDidChangeTreeData = this._onDidChangeTreeData.event;
+    private treeDataEventEmitter = new vscode.EventEmitter<TreeNode | undefined>();
+    public get onDidChangeTreeData() {
+        return this.treeDataEventEmitter.event;
+    }
 
     constructor(context: vscode.ExtensionContext) {
         this.context = context;
@@ -31,7 +33,7 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
 
     refresh() {
         this.tasks = this.context.workspaceState.get('tasks');
-        this._onDidChangeTreeData.fire();
+        this.treeDataEventEmitter.fire();
     }
 
     getTreeItem({treeItem}: TreeNode): vscode.TreeItem {

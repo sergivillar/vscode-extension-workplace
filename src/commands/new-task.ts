@@ -55,7 +55,6 @@ const createTask = (context: vscode.ExtensionContext) => async () => {
         taskProvider.refresh();
         vscode.window.showInformationMessage(`Your new branch ${branchName} has been created`);
     } catch (error) {
-        console.error(error);
         return vscode.window.showErrorMessage("There's any problem creating the new feature.");
     }
 };

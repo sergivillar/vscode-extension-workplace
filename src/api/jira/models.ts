@@ -5,7 +5,7 @@ interface IPriority {
     id: string;
 }
 
-type AvatarUrls = {
+interface IAvatarUrls {
     '48x48': string;
     '24x24': string;
     '16x16': string;
@@ -17,7 +17,7 @@ interface IUser {
     name: string;
     key: string;
     emailAddress: string;
-    avatarUrls: AvatarUrls;
+    avatarUrls: IAvatarUrls;
     displayName: string;
     active: boolean;
     timeZone: string;
@@ -43,7 +43,7 @@ interface IProject {
     id: string;
     key: string;
     name: string;
-    avatarUrls: AvatarUrls;
+    avatarUrls: IAvatarUrls;
     projectCategory: {
         self: string;
         id: string;
