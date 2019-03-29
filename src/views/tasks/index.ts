@@ -1,17 +1,14 @@
 import * as vscode from 'vscode';
 import {
     TreeNode,
-    ReviewNode,
     TaskNode,
     Tasks,
-    TicketNode,
-    TicketsNode,
-    ReviewsNode,
     TaskStatusNode,
     TASK_STATUS,
 } from '../../nodes';
-import {getReviewDetailsById} from '../../api/fisheye';
-import Settings from '../../settings';
+import tickets from './tickets';
+import reviews from './reviews';
+import task from './task';
 
 export let taskProvider: TaskNodeProvider;
 
@@ -49,7 +46,7 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
         if (!element) {
             return TASK_STATUS.map(status => {
                 const numerOfTask = this.tasks && this.tasks.filter(item => item.status === status).length;
-                const taskStatus: TaskStatusNode = {
+                return {
                     type: 'task-status',
                     data: status,
                     treeItem: {
@@ -59,115 +56,38 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
                                 ? vscode.TreeItemCollapsibleState.Collapsed
                                 : vscode.TreeItemCollapsibleState.None,
                     },
-                };
-                return taskStatus;
+                } as TaskStatusNode;
             });
         }
 
-        const children = [];
-
         switch (element.type) {
             case 'task-status': {
-                const taskNodes = this.tasks
+                return this.tasks
                     .filter(item => item.status === element.data)
-                    .map(item => {
-                        const task: TaskNode = {
-                            type: 'task',
-                            data: item,
-                            treeItem: {
-                                label: item.branchName,
-                                collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
-                                contextValue: 'task',
-                            },
-                        };
-                        return task;
-                    });
-                children.push(...taskNodes);
-
-                break;
+                    .map(
+                        item =>
+                            ({
+                                type: 'task',
+                                data: item,
+                                treeItem: {
+                                    label: item.branchName,
+                                    collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
+                                    contextValue: 'task',
+                                },
+                            } as TaskNode)
+                    );
             }
             case 'task':
-                {
-                    const jiraNode: TicketsNode = {
-                        type: 'tickets',
-                        data: element.data.tickets,
-                        treeItem: {
-                            label: 'Tickets',
-                            collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
-                        },
-                    };
-                    children.push(jiraNode);
-
-                    if (element.data.reviews) {
-                        const fisheyeReviewsNode: ReviewsNode = {
-                            type: 'reviews',
-                            data: element.data.reviews,
-                            treeItem: {
-                                label: 'Reviews',
-                                collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
-                            },
-                        };
-                        children.push(fisheyeReviewsNode);
-                    }
-                }
-                break;
+                return task(element);
 
             case 'tickets':
-                {
-                    const ticket = element.data.main;
-                    const node: TicketNode = {
-                        type: 'ticket',
-                        data: ticket,
-                        treeItem: {
-                            label: ticket.name,
-                            collapsibleState: vscode.TreeItemCollapsibleState.None,
-                            command: {
-                                command: 'novum-webapp-workplace.openInBrowser',
-                                title: '',
-                                arguments: [`https://jira.tuenti.io/jira/browse/${ticket.key}`],
-                            },
-                        },
-                    };
-                    children.push(node);
-                }
-                break;
+                return tickets(element);
 
             case 'reviews':
-                {
-                    for (const review of element.data) {
-                        const {
-                            reviewers: {reviewer: reviewers},
-                        } = await getReviewDetailsById(review.id, Settings.authToken);
-                        const totalReviewers = reviewers.length;
-                        const completedReviewers = reviewers.reduce(
-                            (count, {completed}) => (completed ? count + 1 : count),
-                            0
-                        );
-                        const isCompleted = completedReviewers === totalReviewers;
-                        const node: ReviewNode = {
-                            type: 'review',
-                            data: review,
-                            treeItem: {
-                                label: `${isCompleted ? '✔' : '🧐'} (${completedReviewers}/${totalReviewers}) ${
-                                    review.id
-                                } - ${review.name}`,
-                                collapsibleState: vscode.TreeItemCollapsibleState.None,
-                                command: {
-                                    command: 'novum-webapp-workplace.openInBrowser',
-                                    title: '',
-                                    arguments: [`https://fisheye.tuenti.io/cru/${review.id}`],
-                                },
-                            },
-                        };
-                        children.push(node);
-                    }
-                }
-                break;
+                return reviews(element);
 
             default:
-                break;
+                return [];
         }
-
-        return children;
     }
 }
