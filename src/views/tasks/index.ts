@@ -10,7 +10,7 @@ import {
     TaskStatusNode,
     TASK_STATUS,
 } from '../../nodes';
-import {getReviewComments} from '../../api/fisheye';
+import {getReviewDetailsById} from '../../api/fisheye';
 import Settings from '../../settings';
 
 export let taskProvider: TaskNodeProvider;
@@ -135,12 +135,22 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
             case 'reviews':
                 {
                     for (const review of element.data) {
-                        const comments = await getReviewComments(review.id, Settings.authToken);
+                        const {
+                            reviewers: {reviewer: reviewers},
+                        } = await getReviewDetailsById(review.id, Settings.authToken);
+                        const totalReviewers = reviewers.length;
+                        const completedReviewers = reviewers.reduce(
+                            (count, {completed}) => (completed ? count + 1 : count),
+                            0
+                        );
+                        const isCompleted = completedReviewers === totalReviewers;
                         const node: ReviewNode = {
                             type: 'review',
                             data: review,
                             treeItem: {
-                                label: `${review.id} - ${review.name} (${comments.length})`,
+                                label: `${isCompleted ? '✔' : '🧐'} (${completedReviewers}/${totalReviewers}) ${
+                                    review.id
+                                } - ${review.name}`,
                                 collapsibleState: vscode.TreeItemCollapsibleState.None,
                                 command: {
                                     command: 'novum-webapp-workplace.openInBrowser',
