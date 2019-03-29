@@ -1,5 +1,5 @@
 {
-    "name": "novum-webapp-workplace",
+    "name": "webapp-workplace",
     "displayName": "Novum Webapp Workplace",
     "description": "Manage all your work from Jira, Fisheye, current working branches in one place",
     "version": "0.0.1",
@@ -10,17 +10,17 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:novum-webapp-workplace.tasks.create",
-        "onCommand:novum-webapp-workplace.tasks.refresh",
+        "onCommand:webapp-workplace.tasks.create",
+        "onCommand:webapp-workplace.tasks.refresh",
         "onView:tasks"
     ],
     "main": "./out/extension",
     "contributes": {
         "configuration": {
             "type": "object",
-            "title": "novum-webapp-workplace configuration",
+            "title": "webapp-workplace configuration",
             "properties": {
-                "novum-webapp-workplace.settings": {
+                "webapp-workplace.settings": {
                     "type": "object",
                     "default": {
                         "username": "",
@@ -42,37 +42,37 @@
         "menus": {
             "view/title": [
                 {
-                    "command": "novum-webapp-workplace.tasks.create",
+                    "command": "webapp-workplace.tasks.create",
                     "when": "view == tasks",
                     "group": "navigation"
                 },
                 {
-                    "command": "novum-webapp-workplace.tasks.refresh",
+                    "command": "webapp-workplace.tasks.refresh",
                     "when": "view == tasks",
                     "group": "navigation"
                 }
             ],
             "view/item/context": [
                 {
-                    "command": "novum-webapp-workplace.tasks.promote",
+                    "command": "webapp-workplace.tasks.promote",
                     "when": "view == tasks && viewItem == task"
                 },
                 {
-                    "command": "novum-webapp-workplace.tasks.checkout",
+                    "command": "webapp-workplace.tasks.checkout",
                     "when": "view == tasks && viewItem == task",
                     "group": "inline"
                 }
             ],
             "commandPalette": [
                 {
-                    "command": "novum-webapp-workplace.tasks.checkout",
+                    "command": "webapp-workplace.tasks.checkout",
                     "when": "false"
                 }
             ]
         },
         "commands": [
             {
-                "command": "novum-webapp-workplace.tasks.refresh",
+                "command": "webapp-workplace.tasks.refresh",
                 "title": "Refresh",
                 "category": "Webapp",
                 "icon": {
@@ -81,7 +81,7 @@
                 }
             },
             {
-                "command": "novum-webapp-workplace.tasks.create",
+                "command": "webapp-workplace.tasks.create",
                 "title": "New task",
                 "category": "Webapp",
                 "icon": {
@@ -90,11 +90,11 @@
                 }
             },
             {
-                "command": "novum-webapp-workplace.tasks.promote",
+                "command": "webapp-workplace.tasks.promote",
                 "title": "Move task status"
             },
             {
-                "command": "novum-webapp-workplace.tasks.checkout",
+                "command": "webapp-workplace.tasks.checkout",
                 "title": "Checkout",
                 "icon": {
                     "dark": "resources/dark/checkout.svg",

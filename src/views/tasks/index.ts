@@ -122,7 +122,7 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
                             label: ticket.name,
                             collapsibleState: vscode.TreeItemCollapsibleState.None,
                             command: {
-                                command: 'novum-webapp-workplace.openInBrowser',
+                                command: 'webapp-workplace.openInBrowser',
                                 title: '',
                                 arguments: [`https://jira.tuenti.io/jira/browse/${ticket.key}`],
                             },
@@ -148,12 +148,12 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
                             type: 'review',
                             data: review,
                             treeItem: {
-                                label: `${isCompleted ? '✔' : '🧐'} (${completedReviewers}/${totalReviewers}) ${
-                                    review.id
-                                } - ${review.name}`,
+                                label: `${
+                                    isCompleted ? '✔' : '🧐'
+                                } (${completedReviewers}/${totalReviewers}) ${review.id} - ${review.name}`,
                                 collapsibleState: vscode.TreeItemCollapsibleState.None,
                                 command: {
-                                    command: 'novum-webapp-workplace.openInBrowser',
+                                    command: 'webapp-workplace.openInBrowser',
                                     title: '',
                                     arguments: [`https://fisheye.tuenti.io/cru/${review.id}`],
                                 },
