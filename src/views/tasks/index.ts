@@ -1,6 +1,16 @@
 import * as vscode from 'vscode';
-import {TreeNode, ReviewNode, TaskNode, Tasks, TicketNode, TicketsNode, ReviewsNode} from '../../nodes';
-import { getReviewComments } from '../../api/fisheye';
+import {
+    TreeNode,
+    ReviewNode,
+    TaskNode,
+    Tasks,
+    TicketNode,
+    TicketsNode,
+    ReviewsNode,
+    TaskStatusNode,
+    TASK_STATUS,
+} from '../../nodes';
+import {getReviewComments} from '../../api/fisheye';
 import Settings from '../../settings';
 
 export let taskProvider: TaskNodeProvider;
@@ -37,21 +47,44 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
         }
 
         if (!element) {
-            return this.tasks.map(item => {
-                const task: TaskNode = {
-                    type: 'task',
-                    data: item,
+            return TASK_STATUS.map(status => {
+                const numerOfTask = this.tasks && this.tasks.filter(item => item.status === status).length;
+                const taskStatus: TaskStatusNode = {
+                    type: 'task-status',
+                    data: status,
                     treeItem: {
-                        label: item.branchName,
-                        collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
+                        label: `${status.charAt(0).toUpperCase()}${status.slice(1)} (${numerOfTask})`,
+                        collapsibleState:
+                            Number(numerOfTask) > 0
+                                ? vscode.TreeItemCollapsibleState.Collapsed
+                                : vscode.TreeItemCollapsibleState.None,
                     },
                 };
-                return task;
+                return taskStatus;
             });
         }
 
         const children = [];
+
         switch (element.type) {
+            case 'task-status': {
+                const taskNodes = this.tasks
+                    .filter(item => item.status === element.data)
+                    .map(item => {
+                        const task: TaskNode = {
+                            type: 'task',
+                            data: item,
+                            treeItem: {
+                                label: item.branchName,
+                                collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
+                            },
+                        };
+                        return task;
+                    });
+                children.push(...taskNodes);
+
+                break;
+            }
             case 'task':
                 {
                     const jiraNode: TicketsNode = {
