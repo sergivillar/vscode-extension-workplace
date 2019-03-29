@@ -51,6 +51,12 @@
                     "when": "view == tasks",
                     "group": "navigation"
                 }
+            ],
+            "view/item/context": [
+                {
+                    "command": "novum-webapp-workplace.tasks.promote",
+                    "when": "view == tasks && viewItem == task"
+                }
             ]
         },
         "commands": [
@@ -71,6 +77,10 @@
                     "light": "resources/light/add-task.svg",
                     "dark": "resources/dark/add-task.svg"
                 }
+            },
+            {
+                "command": "novum-webapp-workplace.tasks.promote",
+                "title": "Move task status"
             }
         ],
         "viewsContainers": {

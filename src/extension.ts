@@ -2,7 +2,9 @@ import * as vscode from 'vscode';
 import {activateView} from './views/tasks';
 import createTask from './commands/new-task';
 import refreshTasks from './commands/refresh-tasks';
+import promoteTaks from './commands/promote-task';
 import Settings from './settings';
+import {TaskNode} from './nodes';
 
 export async function activate(context: vscode.ExtensionContext) {
     await Settings.configureExtension();
@@ -29,7 +31,10 @@ export async function activate(context: vscode.ExtensionContext) {
             vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`${url}`))
         ),
         vscode.commands.registerCommand('novum-webapp-workplace.tasks.refresh', refreshTasks(context)),
-        vscode.commands.registerCommand('novum-webapp-workplace.tasks.create', createTask(context))
+        vscode.commands.registerCommand('novum-webapp-workplace.tasks.create', createTask(context)),
+        vscode.commands.registerCommand('novum-webapp-workplace.tasks.promote', (task: TaskNode) =>
+            promoteTaks(task, context)
+        )
     );
 
     await refreshTasks(context)();

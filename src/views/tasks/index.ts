@@ -77,6 +77,7 @@ export class TaskNodeProvider implements vscode.TreeDataProvider<TreeNode> {
                             treeItem: {
                                 label: item.branchName,
                                 collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
+                                contextValue: 'task',
                             },
                         };
                         return task;
