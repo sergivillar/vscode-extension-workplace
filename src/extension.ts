@@ -29,15 +29,15 @@ export async function activate(context: vscode.ExtensionContext) {
 
     activateView(context);
     context.subscriptions.push(
-        vscode.commands.registerCommand('novum-webapp-workplace.openInBrowser', url =>
+        vscode.commands.registerCommand('webapp-workplace.openInBrowser', url =>
             vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`${url}`))
         ),
-        vscode.commands.registerCommand('novum-webapp-workplace.tasks.refresh', refreshTasks(context)),
-        vscode.commands.registerCommand('novum-webapp-workplace.tasks.create', createTask(context)),
-        vscode.commands.registerCommand('novum-webapp-workplace.tasks.promote', (task: TaskNode) =>
+        vscode.commands.registerCommand('webapp-workplace.tasks.refresh', refreshTasks(context)),
+        vscode.commands.registerCommand('webapp-workplace.tasks.create', createTask(context)),
+        vscode.commands.registerCommand('webapp-workplace.tasks.promote', (task: TaskNode) =>
             promoteTaks(task, context)
         ),
-        vscode.commands.registerCommand('novum-webapp-workplace.tasks.checkout', (task: TaskNode) =>
+        vscode.commands.registerCommand('webapp-workplace.tasks.checkout', (task: TaskNode) =>
             checkout(task, context)
         )
     );

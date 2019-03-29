@@ -4,7 +4,7 @@ import {getCurrentBranch, createBranch} from '../api/git';
 import {getTicket} from '../api/jira';
 import settings from '../settings';
 import {taskProvider} from '../views/tasks';
-import {ITask, TASK_STATUS_WIP} from '../nodes';
+import {ITask, TASK_STATUS_WIP, Tasks} from '../nodes';
 
 const createTask = (context: vscode.ExtensionContext) => async () => {
     const {username} = settings;
@@ -49,8 +49,9 @@ const createTask = (context: vscode.ExtensionContext) => async () => {
             },
             createdAt: Date.now(),
         };
+        const tasks = (await context.workspaceState.get('tasks')) as Tasks;
 
-        await context.workspaceState.update('tasks', [dataToSave]);
+        await context.workspaceState.update('tasks', [...tasks, dataToSave]);
         taskProvider.refresh();
         vscode.window.showInformationMessage(`Your new branch ${branchName} has been created`);
     } catch (error) {
