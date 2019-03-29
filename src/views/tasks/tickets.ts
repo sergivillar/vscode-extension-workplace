@@ -1,20 +1,18 @@
-import { TicketNode, TicketsNode } from "../../nodes";
-import { TreeItemCollapsibleState } from "vscode";
+import {TicketNode, TicketsNode} from '../../nodes';
+import {TreeItemCollapsibleState} from 'vscode';
 
-export default (element: TicketsNode) => {
-    const ticket = element.data.main;
-    const node: TicketNode = {
+export default ({data: {main: ticket}}: TicketsNode) => [
+    {
         type: 'ticket',
         data: ticket,
         treeItem: {
             label: ticket.name,
             collapsibleState: TreeItemCollapsibleState.None,
             command: {
-                command: 'novum-webapp-workplace.openInBrowser',
+                command: 'webapp-workplace.openInBrowser',
                 title: '',
                 arguments: [`https://jira.tuenti.io/jira/browse/${ticket.key}`],
             },
         },
-    };
-    return [node];
-}
+    } as TicketNode,
+];

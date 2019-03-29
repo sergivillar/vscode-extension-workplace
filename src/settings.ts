@@ -13,7 +13,7 @@ const Settings = {
         }
 
         const result = await vscode.window.showInformationMessage(
-            'Welcome to novum-webapp-workplace. You need to configure the extension',
+            'Welcome to webapp-workplace. You need to configure the extension',
             'OK'
         );
 
@@ -43,13 +43,13 @@ const Settings = {
             await vscode.workspace
                 .getConfiguration()
                 .update(
-                    'novum-webapp-workplace.settings',
+                    'webapp-workplace.settings',
                     {username, authToken},
                     vscode.ConfigurationTarget.Global
                 );
         } catch (error) {
             console.error(error);
-            return vscode.window.showErrorMessage('Error savig novum-webapp-workplace settings.');
+            return vscode.window.showErrorMessage('Error savig webapp-workplace settings.');
         }
 
         this.username = username;
