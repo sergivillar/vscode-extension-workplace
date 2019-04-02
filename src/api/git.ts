@@ -6,15 +6,10 @@ const executeGitCommand = (command: string) => {
         return 'No workspace path provided';
     }
 
-    try {
-        process.chdir(vscode.workspace.workspaceFolders[0].uri.path);
-        return execSync(command)
-            .toString()
-            .trim();
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+    process.chdir(vscode.workspace.workspaceFolders[0].uri.path);
+    return execSync(command)
+        .toString()
+        .trim();
 };
 
 export const getCurrentBranch = () => executeGitCommand('git rev-parse --abbrev-ref HEAD');

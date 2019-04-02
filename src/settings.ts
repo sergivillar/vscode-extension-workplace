@@ -48,7 +48,6 @@ const Settings = {
                     vscode.ConfigurationTarget.Global
                 );
         } catch (error) {
-            console.error(error);
             return vscode.window.showErrorMessage('Error savig webapp-workplace settings.');
         }
 

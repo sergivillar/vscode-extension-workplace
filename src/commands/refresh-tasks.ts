@@ -45,7 +45,6 @@ const refreshTasks = (context: vscode.ExtensionContext) => async () => {
         taskProvider.refresh();
         vscode.window.showInformationMessage('All tasks updated');
     } catch (error) {
-        console.error(error);
         return vscode.window.showErrorMessage("There's any problem creating the new feature.");
     }
 };
